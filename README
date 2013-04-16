@@ -46,6 +46,7 @@ So, you want to host your own short URLs on your Django site:
    (where ``object`` is a model instance).
   
    or::
+
         {% load shorturl %}
         <a href="{{ object|shorturl }}">...</a>
 
