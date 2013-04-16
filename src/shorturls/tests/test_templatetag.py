@@ -28,18 +28,26 @@ class TemplateTagTestCase(TestCase):
     def test_shorturl(self):
         r = self.render('{% shorturl a %}', a=Animal.objects.get(id=12345))
         self.assertEqual(r, '/ADNH')
+        r = self.render('{{ a|shorturl }}', a=Animal.objects.get(id=12345))
+        self.assertEqual(r, '/ADNH')
 
     def test_bad_context(self):
         r = self.render('{% shorturl a %}')
+        self.assertEqual(r, '')
+        r = self.render('{{ a|shorturl }}')
         self.assertEqual(r, '')
 
     def test_no_prefix(self):
         r = self.render('{% shorturl m %}', m=Mineral.objects.all()[0])
         self.assertEqual(r, '')
+        r = self.render('{{ m|shorturl }}', m=Mineral.objects.all()[0])
+        self.assertEqual(r, '')
 
     def test_short_base_url(self):
         settings.SHORT_BASE_URL = 'http://example.com/'
         r = self.render('{% shorturl a %}', a=Animal.objects.get(id=12345))
+        self.assertEqual(r, 'http://example.com/ADNH')
+        r = self.render('{{ a|shorturl }}', a=Animal.objects.get(id=12345))
         self.assertEqual(r, 'http://example.com/ADNH')
 
     def test_revcanonical(self):
